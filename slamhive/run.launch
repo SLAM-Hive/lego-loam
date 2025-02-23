@@ -1,7 +1,11 @@
 <launch>
+
+
+    <arg name="pointcloud_topic" default="/kitti/velo/pointcloud" />
+    <arg name="imu_topic" default="/imu/data" />
  
     <!--- Result dir -->  
-    <param name="RESULT_PATH" type="string" value="/home/hglee/catkin_ws/src/re_00.txt" />
+    <param name="RESULT_PATH" type="string" value="/root/catkin_ws/traj.txt" />
 
     <!--- Sim Time -->
     <param name="/use_sim_time" value="true" />
@@ -14,6 +18,11 @@
     <node pkg="tf" type="static_transform_publisher" name="base_link_to_camera" args="0 0 0 -1.570795 -1.570795 0        /camera /base_link   10" />
 
     <!--- LeGO-LOAM -->    
+
+<!--好像是可以加入imu的可以增加上这个版本试试-->
+    <remap from="/kitti/velo/pointcloud" to="$(arg pointcloud_topic)" />
+    <remap from="/imu/data" to="$(arg imu_topic)" />
+
     <node pkg="lego_loam" type="imageProjection"    name="imageProjection"    output="screen"/>
     <node pkg="lego_loam" type="featureAssociation" name="featureAssociation" output="screen"/>
     <node pkg="lego_loam" type="mapOptmization"     name="mapOptmization"     output="screen"/>
